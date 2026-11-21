@@ -1003,16 +1003,10 @@ function createBoardItemDOM(board, isLocal) {
         ? `<span class="material-icons drag-handle" title="끌어서 순서 변경" aria-hidden="true">drag_indicator</span>`
         : '';
 
-    const bTheme = board.theme || (board.custom_labels && board.custom_labels.theme) || localStorage.getItem(`board_sticker_theme_${board.id}`) || "praise";
-    const isPunish = normalizeStickerTheme(bTheme) === "punish";
-    const themeBadgeHtml = isPunish
-        ? `<span class="badge-board-theme" style="display:inline-block; font-size:10px; font-weight:700; color:#E11D48; background:#FFE4E6; border-radius:4px; padding:1px 5px; margin-left:4px;">옐로카드</span>`
-        : `<span class="badge-board-theme" style="display:inline-block; font-size:10px; font-weight:700; color:#EA580C; background:#FFEDD5; border-radius:4px; padding:1px 5px; margin-left:4px;">칭찬</span>`;
-
     item.innerHTML = `
         ${dragHandleHtml}
         <div class="board-item-info">
-            <span class="board-item-title">${escapeHtml(board.title)} ${themeBadgeHtml}</span>
+            <span class="board-item-title">${escapeHtml(board.title)}</span>
             <span class="board-item-code">보상: ${escapeHtml(board.reward_text || '없음')}</span>
         </div>
         <div class="board-item-actions">
@@ -1731,14 +1725,7 @@ if (btnShare) {
         }
         modalShare.classList.remove("hidden");
         inputCreateBoardTitle.value = "";
-        const activeTheme = getActiveStickerTheme();
-        const createThemeSelect = document.getElementById("create-board-theme");
-        if (createThemeSelect) {
-            createThemeSelect.value = activeTheme;
-        }
-        inputCreateBoardTitle.placeholder = (activeTheme === "punish")
-            ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
-            : "스티커판 이름 (예: 우리의 약속 판 🐾)";
+        inputCreateBoardTitle.placeholder = "스티커판 이름 (예: 우리의 약속 판 🐾)";
         inputCreateBoardTitle.focus();
     });
 }
@@ -1755,9 +1742,7 @@ btnCreateBoard.addEventListener("click", async () => {
         return;
     }
     const titleVal = inputCreateBoardTitle.value.trim();
-    const chosenTheme = normalizeStickerTheme((document.getElementById("create-board-theme") && document.getElementById("create-board-theme").value) || "praise");
-    const isPunish = chosenTheme === "punish";
-    const finalTitle = titleVal || (isPunish ? "우리의 옐로카드 판 🐾" : "우리의 새로운 칭찬판 💖");
+    const finalTitle = titleVal || "우리의 새로운 칭찬판 💖";
 
     showLoadingSpinner();
     modalShare.classList.add("hidden");
@@ -1825,17 +1810,6 @@ if (editStickerTheme) {
     });
 }
 
-const createBoardThemeSelect = document.getElementById("create-board-theme");
-if (createBoardThemeSelect) {
-    createBoardThemeSelect.addEventListener("change", (e) => {
-        const isPunish = normalizeStickerTheme(e.target.value) === "punish";
-        if (inputCreateBoardTitle) {
-            inputCreateBoardTitle.placeholder = isPunish
-                ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
-                : "스티커판 이름 (예: 우리의 약속 판 🐾)";
-        }
-    });
-}
 
 btnSettingsClose.addEventListener("click", () => {
     modalSettings.classList.add("hidden");
@@ -2665,14 +2639,7 @@ function initializeApp() {
             // 공유/생성 모달을 열고 새 보드 생성 인풋에 포커싱
             modalShare.classList.remove("hidden");
             inputCreateBoardTitle.value = "";
-            const activeTheme = getActiveStickerTheme();
-            const createThemeSelect = document.getElementById("create-board-theme");
-            if (createThemeSelect) {
-                createThemeSelect.value = activeTheme;
-            }
-            inputCreateBoardTitle.placeholder = (activeTheme === "punish")
-                ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
-                : "스티커판 이름 (예: 우리의 약속 판 🐾)";
+            inputCreateBoardTitle.placeholder = "스티커판 이름 (예: 우리의 약속 판 🐾)";
             inputCreateBoardTitle.focus();
         });
     }

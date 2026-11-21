@@ -752,12 +752,12 @@ async function apiGetAllBoards() {
     }
 }
 
-// 다음 순차적 보드 코드 생성 (기존 보드 CAT_1 -> 두번째 보드는 CAT_2, 세번째는 CAT_3)
+// 다음 순차적 보드 코드 생성 (기존 보드 GUN_1 -> 두번째 보드는 GUN_2, 세번째는 GUN_3)
 async function getNextSequentialBoardCode(baseBoardId) {
     const allBoards = await apiGetAllBoards();
-    let sourceId = baseBoardId || currentBoardId || "CAT";
+    let sourceId = baseBoardId || currentBoardId || "GUN";
     if (sourceId === "DEFAULT" || sourceId === "TEST-COSMIC-BOARD" || sourceId === "1") {
-        sourceId = "CAT";
+        sourceId = "GUN";
     }
 
     let basePrefix = String(sourceId).trim().toUpperCase();
@@ -765,7 +765,7 @@ async function getNextSequentialBoardCode(baseBoardId) {
     if (basePrefix.endsWith("_")) {
         basePrefix = basePrefix.slice(0, -1);
     }
-    if (!basePrefix || basePrefix === "1") basePrefix = "CAT";
+    if (!basePrefix || basePrefix === "1") basePrefix = "GUN";
 
     let maxNum = 0;
 
@@ -1725,7 +1725,14 @@ if (btnShare) {
         }
         modalShare.classList.remove("hidden");
         inputCreateBoardTitle.value = "";
-        inputCreateBoardTitle.placeholder = "스티커판 이름 (예: 우리의 약속 판 🐾)";
+        const activeTheme = getActiveStickerTheme();
+        const createThemeSelect = document.getElementById("create-board-theme");
+        if (createThemeSelect) {
+            createThemeSelect.value = activeTheme;
+        }
+        inputCreateBoardTitle.placeholder = (activeTheme === "punish")
+            ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
+            : "스티커판 이름 (예: 우리의 약속 판 🐾)";
         inputCreateBoardTitle.focus();
     });
 }
@@ -1742,7 +1749,9 @@ btnCreateBoard.addEventListener("click", async () => {
         return;
     }
     const titleVal = inputCreateBoardTitle.value.trim();
-    const finalTitle = titleVal || "우리의 새로운 칭찬판 💖";
+    const chosenTheme = normalizeStickerTheme((document.getElementById("create-board-theme") && document.getElementById("create-board-theme").value) || "praise");
+    const isPunish = chosenTheme === "punish";
+    const finalTitle = titleVal || (isPunish ? "우리의 옐로카드 판 🐾" : "우리의 새로운 칭찬판 💖");
 
     showLoadingSpinner();
     modalShare.classList.add("hidden");
@@ -1807,6 +1816,18 @@ btnSettings.addEventListener("click", () => {
 if (editStickerTheme) {
     editStickerTheme.addEventListener("change", (e) => {
         renderThemePreviewBar("theme-sticker-preview-bar", e.target.value);
+    });
+}
+
+const createBoardThemeSelect = document.getElementById("create-board-theme");
+if (createBoardThemeSelect) {
+    createBoardThemeSelect.addEventListener("change", (e) => {
+        const isPunish = normalizeStickerTheme(e.target.value) === "punish";
+        if (inputCreateBoardTitle) {
+            inputCreateBoardTitle.placeholder = isPunish
+                ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
+                : "스티커판 이름 (예: 우리의 약속 판 🐾)";
+        }
     });
 }
 
@@ -2639,7 +2660,14 @@ function initializeApp() {
             // 공유/생성 모달을 열고 새 보드 생성 인풋에 포커싱
             modalShare.classList.remove("hidden");
             inputCreateBoardTitle.value = "";
-            inputCreateBoardTitle.placeholder = "스티커판 이름 (예: 우리의 약속 판 🐾)";
+            const activeTheme = getActiveStickerTheme();
+            const createThemeSelect = document.getElementById("create-board-theme");
+            if (createThemeSelect) {
+                createThemeSelect.value = activeTheme;
+            }
+            inputCreateBoardTitle.placeholder = (activeTheme === "punish")
+                ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
+                : "스티커판 이름 (예: 우리의 약속 판 🐾)";
             inputCreateBoardTitle.focus();
         });
     }

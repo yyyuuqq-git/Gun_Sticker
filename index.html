@@ -270,11 +270,19 @@
     <div id="modal-share" class="modal-overlay hidden">
         <div class="modal-content">
             <h3 class="modal-title">🆕 새 스티커판 만들기</h3>
-            <p class="modal-desc">새로 만들 스티커판의 이름을 입력해 주세요.</p>
+            <p class="modal-desc">새로 만들 스티커판의 제목, 목표 개수, 보상을 설정합니다. <span class="badge-lock">(남자친구 권한 필요)</span></p>
 
             <div class="form-group" style="margin-top: 16px;">
-                <label for="input-create-board-title" style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: block;">스티커판 이름</label>
+                <label for="input-create-board-title">스티커판 제목</label>
                 <input type="text" id="input-create-board-title" placeholder="스티커판 이름 (예: 우리의 약속 판 🐾)">
+            </div>
+            <div class="form-group" style="margin-top: 12px;">
+                <label for="input-create-board-target">목표 개수 (20 ~ 50)</label>
+                <input type="number" id="input-create-board-target" value="30" min="1" max="100">
+            </div>
+            <div class="form-group" style="margin-top: 12px;">
+                <label for="input-create-board-reward">달성 완료 보상</label>
+                <input type="text" id="input-create-board-reward" placeholder="예: 맛있는 디저트 데이트! 🍦">
             </div>
 
             <div class="modal-actions" style="margin-top: 24px;">

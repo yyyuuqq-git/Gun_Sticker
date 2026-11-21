@@ -145,6 +145,8 @@ const btnSidebarClose = document.getElementById("btn-sidebar-close");
 const boardListContainer = document.getElementById("board-list");
 const btnAddBoardSidebar = document.getElementById("btn-add-board-sidebar");
 const inputCreateBoardTitle = document.getElementById("input-create-board-title");
+const inputCreateBoardTarget = document.getElementById("input-create-board-target");
+const inputCreateBoardReward = document.getElementById("input-create-board-reward");
 
 // 모달 및 입력 폼 요소
 const modalPin = document.getElementById("modal-pin");
@@ -1725,6 +1727,8 @@ if (btnShare) {
         }
         modalShare.classList.remove("hidden");
         inputCreateBoardTitle.value = "";
+        if (inputCreateBoardTarget) inputCreateBoardTarget.value = "30";
+        if (inputCreateBoardReward) inputCreateBoardReward.value = "";
         inputCreateBoardTitle.placeholder = "스티커판 이름 (예: 우리의 약속 판 🐾)";
         inputCreateBoardTitle.focus();
     });
@@ -1742,9 +1746,12 @@ btnCreateBoard.addEventListener("click", async () => {
         return;
     }
     const titleVal = inputCreateBoardTitle.value.trim();
+    const targetVal = inputCreateBoardTarget ? (parseInt(inputCreateBoardTarget.value, 10) || 30) : 30;
+    const rewardVal = inputCreateBoardReward ? inputCreateBoardReward.value.trim() : "";
     const chosenTheme = "circle";
     const isPunish = false;
     const finalTitle = titleVal || "우리의 새로운 칭찬판 💖";
+    const finalReward = rewardVal || "새로운 선물 지정하기";
 
     showLoadingSpinner();
     modalShare.classList.add("hidden");
@@ -1759,8 +1766,8 @@ btnCreateBoard.addEventListener("click", async () => {
         const newBoard = {
             id: finalCode,
             title: finalTitle,
-            target_count: 30,
-            reward_text: "새로운 선물 지정하기",
+            target_count: targetVal,
+            reward_text: finalReward,
             editor_pin: activePin,
             theme: chosenTheme,
             theme_color: activeColor,
@@ -1778,6 +1785,8 @@ btnCreateBoard.addEventListener("click", async () => {
             await saveStickerTheme(chosenTheme, finalCode);
             localStorage.setItem("is_editor", "true");
             inputCreateBoardTitle.value = "";
+            if (inputCreateBoardTarget) inputCreateBoardTarget.value = "30";
+            if (inputCreateBoardReward) inputCreateBoardReward.value = "";
             isEditorMode = true;
             updateRoleUI();
             await refreshApp();
@@ -2642,6 +2651,8 @@ function initializeApp() {
             // 공유/생성 모달을 열고 새 보드 생성 인풋에 포커싱
             modalShare.classList.remove("hidden");
             inputCreateBoardTitle.value = "";
+            if (inputCreateBoardTarget) inputCreateBoardTarget.value = "30";
+            if (inputCreateBoardReward) inputCreateBoardReward.value = "";
             inputCreateBoardTitle.placeholder = "스티커판 이름 (예: 우리의 약속 판 🐾)";
             inputCreateBoardTitle.focus();
         });

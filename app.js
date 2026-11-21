@@ -1725,14 +1725,7 @@ if (btnShare) {
         }
         modalShare.classList.remove("hidden");
         inputCreateBoardTitle.value = "";
-        const activeTheme = getActiveStickerTheme();
-        const createThemeSelect = document.getElementById("create-board-theme");
-        if (createThemeSelect) {
-            createThemeSelect.value = activeTheme;
-        }
-        inputCreateBoardTitle.placeholder = (activeTheme === "punish")
-            ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
-            : "스티커판 이름 (예: 우리의 약속 판 🐾)";
+        inputCreateBoardTitle.placeholder = "스티커판 이름 (예: 우리의 약속 판 🐾)";
         inputCreateBoardTitle.focus();
     });
 }
@@ -1749,9 +1742,9 @@ btnCreateBoard.addEventListener("click", async () => {
         return;
     }
     const titleVal = inputCreateBoardTitle.value.trim();
-    const chosenTheme = normalizeStickerTheme((document.getElementById("create-board-theme") && document.getElementById("create-board-theme").value) || "praise");
-    const isPunish = chosenTheme === "punish";
-    const finalTitle = titleVal || (isPunish ? "우리의 옐로카드 판 🐾" : "우리의 새로운 칭찬판 💖");
+    const chosenTheme = "circle";
+    const isPunish = false;
+    const finalTitle = titleVal || "우리의 새로운 칭찬판 💖";
 
     showLoadingSpinner();
     modalShare.classList.add("hidden");
@@ -1760,14 +1753,14 @@ btnCreateBoard.addEventListener("click", async () => {
         // 순차적 보드 코드 생성 (마지막 숫자 + 1, 예: 달의 마지막 숫자가 2면 다음은 3)
         const finalCode = await getNextSequentialBoardCode();
 
-        const activeColor = isPunish ? "#E11D48" : "#3B82F6";
-        const activePin = (currentBoard && currentBoard.editor_pin) || localStorage.getItem(`board_pin_${currentBoardId}`) || "1234";
+        const activeColor = "#3B82F6";
+        const activePin = (currentBoard && currentBoard.editor_pin) || localStorage.getItem(`board_pin_${currentBoardId}`) || "0427";
 
         const newBoard = {
             id: finalCode,
             title: finalTitle,
             target_count: 30,
-            reward_text: isPunish ? "약속 지키기" : "새로운 선물 지정하기",
+            reward_text: "새로운 선물 지정하기",
             editor_pin: activePin,
             theme: chosenTheme,
             theme_color: activeColor,
@@ -1819,17 +1812,6 @@ if (editStickerTheme) {
     });
 }
 
-const createBoardThemeSelect = document.getElementById("create-board-theme");
-if (createBoardThemeSelect) {
-    createBoardThemeSelect.addEventListener("change", (e) => {
-        const isPunish = normalizeStickerTheme(e.target.value) === "punish";
-        if (inputCreateBoardTitle) {
-            inputCreateBoardTitle.placeholder = isPunish
-                ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
-                : "스티커판 이름 (예: 우리의 약속 판 🐾)";
-        }
-    });
-}
 
 
 btnSettingsClose.addEventListener("click", () => {
@@ -2660,14 +2642,7 @@ function initializeApp() {
             // 공유/생성 모달을 열고 새 보드 생성 인풋에 포커싱
             modalShare.classList.remove("hidden");
             inputCreateBoardTitle.value = "";
-            const activeTheme = getActiveStickerTheme();
-            const createThemeSelect = document.getElementById("create-board-theme");
-            if (createThemeSelect) {
-                createThemeSelect.value = activeTheme;
-            }
-            inputCreateBoardTitle.placeholder = (activeTheme === "punish")
-                ? "스티커판 이름 (예: 우리의 옐로카드 판 🐾)"
-                : "스티커판 이름 (예: 우리의 약속 판 🐾)";
+            inputCreateBoardTitle.placeholder = "스티커판 이름 (예: 우리의 약속 판 🐾)";
             inputCreateBoardTitle.focus();
         });
     }

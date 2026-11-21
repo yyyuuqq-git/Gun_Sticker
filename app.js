@@ -2751,8 +2751,8 @@ function initializeApp() {
         welcomeScreen.classList.add("hidden");
 
         try {
-            const chosenTheme = normalizeStickerTheme((setupBoardTheme && setupBoardTheme.value) || "praise");
-            const defaultColor = chosenTheme === "punish" ? "#E11D48" : "#3B82F6";
+            const chosenTheme = "circle";
+            const defaultColor = "#3B82F6";
 
             const newBoard = {
                 id: code,
